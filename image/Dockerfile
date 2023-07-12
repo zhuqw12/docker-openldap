@@ -21,7 +21,10 @@ RUN echo "deb http://ftp.debian.org/debian buster-backports main" >> /etc/apt/so
 # Install OpenLDAP, ldap-utils and ssl-tools from the (backported) baseimage and clean apt-get files
 # sources: https://github.com/osixia/docker-light-baseimage/blob/master/image/tool/add-service-available
 #          https://github.com/osixia/docker-light-baseimage/blob/master/image/service-available/:ssl-tools/download.sh
-RUN echo "path-include /usr/share/doc/krb5*" >> /etc/dpkg/dpkg.cfg.d/docker && apt-get -y update \
+RUN echo "path-include /usr/share/doc/krb5*" >> /etc/dpkg/dpkg.cfg.d/docker \
+    && apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 0E98404D386FA1D9 \
+    && apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 6ED0E7B82643E131 \
+    && apt-get -y update \
     && /container/tool/add-service-available :ssl-tools \
     && LC_ALL=C DEBIAN_FRONTEND=noninteractive apt-get -t buster-backports install -y --no-install-recommends \
     ca-certificates \
